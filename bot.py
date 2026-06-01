@@ -7,7 +7,7 @@ TOKEN = os.environ["TOKEN"]
 GUILD_ID = int(os.environ["GUILD_ID"])
 
 config = {
-    "paypalLink": os.environ.get("PAYPAL_LINK", ""),
+    "paypalLink": os.environ.get("PAYPAL_LINK", "https://www.paypal.com/paypalme/rqv6"),
     "paypalImage": os.environ.get("PAYPAL_IMAGE", ""),
     "stcpayNumber": os.environ.get("STC_NUMBER", "1151740328"),
     "stcpayIBAN": os.environ.get("STC_IBAN", "SA7978000000001151740328"),
