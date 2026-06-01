@@ -10,6 +10,7 @@ config = {
     "paypalLink": os.environ.get("PAYPAL_LINK", ""),
     "paypalImage": os.environ.get("PAYPAL_IMAGE", ""),
     "stcpayNumber": os.environ.get("STC_NUMBER", "1151740328"),
+    "stcpayIBAN": os.environ.get("STC_IBAN", "SA7978000000001151740328"),
     "stcpayImage": os.environ.get("STC_IMAGE", ""),
     "alrajhiAccount": os.environ.get("ALRAJHI_ACCOUNT", "0770200100060845880020"),
     "alrajhiIBAN": os.environ.get("ALRAJHI_IBAN", "SA9580000857608014588020"),
@@ -17,12 +18,12 @@ config = {
     "barqAccount": os.environ.get("BARQ_ACCOUNT", "991102428726994"),
     "barqIBAN": os.environ.get("BARQ_IBAN", "SA9430100991102428726994"),
     "barqImage": os.environ.get("BARQ_IMAGE", ""),
-    "ltcAddress": os.environ.get("LTC_ADDRESS", ""),
-    "internationalIBAN": os.environ.get("INTL_IBAN", ""),
-    "internationalSWIFT": os.environ.get("INTL_SWIFT", ""),
-    "internationalBank": os.environ.get("INTL_BANK", ""),
-    "internationalName": os.environ.get("INTL_NAME", "يوسف عيضه خليفس"),
-    "bannerImage": os.environ.get("BANNER_IMAGE", ""),
+    "ltcAddress": os.environ.get("LTC_ADDRESS", "ltc1qssnw8la9l8qzwea575xw5gcshy0j7g70whfclf"),
+    "internationalIBAN": os.environ.get("INTL_IBAN", "OM380270368053464840032"),
+    "internationalSWIFT": os.environ.get("INTL_SWIFT", "BMUSOMRX"),
+    "internationalBank": os.environ.get("INTL_BANK", "Bank Muscat"),
+    "internationalName": os.environ.get("INTL_NAME", "MOHAMMED HAMOOD SAID AL GHAWI"),
+    "bannerImage": os.environ.get("BANNER_IMAGE", "https://cdn.discordapp.com/attachments/897260329778696192/1510983442983157912/Gemini_Generated_Image_t6je0ot6je0ot6je.png?ex=6a1ecc7d&is=6a1d7afd&hm=20929e6fabff36130be03be1f64dea1bc909a436490ca13ef2c320109bd1cba8f&"),
 }
 
 COLOR = 0xA855F7
@@ -52,7 +53,7 @@ class PaymentView(discord.ui.View):
         embed = discord.Embed(title="STC Pay 📱", color=COLOR)
         embed.add_field(name="المبلغ", value=f"{self.amount} ريال", inline=False)
         embed.add_field(name="رقم الحساب", value=config["stcpayNumber"], inline=False)
-        embed.add_field(name="IBAN", value=config["stcpayIBAN"] if config.get("stcpayIBAN") else "SA7978000000001151740328", inline=False)
+        embed.add_field(name="IBAN", value=config["stcpayIBAN"], inline=False)
         if config.get("stcpayImage"):
             embed.set_image(url=config["stcpayImage"])
         await interaction.response.send_message(embed=embed, ephemeral=True)
