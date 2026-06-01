@@ -25,6 +25,8 @@ config = {
     "bannerImage": os.environ.get("BANNER_IMAGE", ""),
 }
 
+COLOR = 0xA855F7
+
 intents = discord.Intents.default()
 bot = commands.Bot(command_prefix="!", intents=intents)
 tree = bot.tree
@@ -38,7 +40,7 @@ class PaymentView(discord.ui.View):
 
     @discord.ui.button(label="PayPal 💳", style=discord.ButtonStyle.primary)
     async def paypal(self, interaction: discord.Interaction, button: discord.ui.Button):
-        embed = discord.Embed(title="PayPal 💳", color=0x003087)
+        embed = discord.Embed(title="PayPal 💳", color=COLOR)
         embed.add_field(name="المبلغ", value=f"{self.amount} ريال", inline=False)
         embed.add_field(name="رابط الدفع", value=config["paypalLink"], inline=False)
         if config.get("paypalImage"):
@@ -47,7 +49,7 @@ class PaymentView(discord.ui.View):
 
     @discord.ui.button(label="STC Pay 📱", style=discord.ButtonStyle.primary)
     async def stcpay(self, interaction: discord.Interaction, button: discord.ui.Button):
-        embed = discord.Embed(title="STC Pay 📱", color=0x6B1F7C)
+        embed = discord.Embed(title="STC Pay 📱", color=COLOR)
         embed.add_field(name="المبلغ", value=f"{self.amount} ريال", inline=False)
         embed.add_field(name="رقم STC Pay", value=config["stcpayNumber"], inline=False)
         if config.get("stcpayImage"):
@@ -56,7 +58,7 @@ class PaymentView(discord.ui.View):
 
     @discord.ui.button(label="الراجحي 🏦", style=discord.ButtonStyle.success)
     async def alrajhi(self, interaction: discord.Interaction, button: discord.ui.Button):
-        embed = discord.Embed(title="Al Rajhi Bank 🏦", color=0x006400)
+        embed = discord.Embed(title="Al Rajhi Bank 🏦", color=COLOR)
         embed.add_field(name="المبلغ", value=f"{self.amount} ريال", inline=False)
         embed.add_field(name="رقم الحساب", value=config["alrajhiAccount"], inline=False)
         embed.add_field(name="IBAN", value=config["alrajhiIBAN"], inline=False)
@@ -66,7 +68,7 @@ class PaymentView(discord.ui.View):
 
     @discord.ui.button(label="برق 🏦", style=discord.ButtonStyle.success)
     async def barq(self, interaction: discord.Interaction, button: discord.ui.Button):
-        embed = discord.Embed(title="BARQ - ANB 🏦", color=0x1E90FF)
+        embed = discord.Embed(title="BARQ - ANB 🏦", color=COLOR)
         embed.add_field(name="المبلغ", value=f"{self.amount} ريال", inline=False)
         embed.add_field(name="رقم الحساب", value=config["barqAccount"], inline=False)
         embed.add_field(name="IBAN", value=config["barqIBAN"], inline=False)
@@ -76,7 +78,7 @@ class PaymentView(discord.ui.View):
 
     @discord.ui.button(label="تحويل دولي 🌍", style=discord.ButtonStyle.primary)
     async def transfer(self, interaction: discord.Interaction, button: discord.ui.Button):
-        embed = discord.Embed(title="التحويل الدولي 🌍", color=0x1E90FF)
+        embed = discord.Embed(title="التحويل الدولي 🌍", color=COLOR)
         embed.add_field(name="المبلغ", value=f"{self.amount} ريال", inline=False)
         embed.add_field(name="البنك", value=config["internationalBank"], inline=False)
         embed.add_field(name="IBAN", value=config["internationalIBAN"], inline=False)
@@ -96,13 +98,21 @@ async def pay(interaction: discord.Interaction, amount: str):
         return
 
     embed = discord.Embed(
-        title="💰 اختر طريقة الدفع",
-        description=f"المبلغ: **{amt} ريال**\nاختر الطريقة المناسبة لك 👇",
-        color=0x000942
+        title="🌟 أهلاً وسهلاً في Peak Store 🌟",
+        description=(
+            "نسعد بخدمتك دائماً ✨\n\n"
+            "─────────────────\n"
+            f"💎 المبلغ المطلوب: **{amt} ريال**\n"
+            "─────────────────\n\n"
+            "اختر طريقة الدفع 👇"
+        ),
+        color=COLOR
     )
 
     if config.get("bannerImage"):
         embed.set_image(url=config["bannerImage"])
+
+    embed.set_footer(text="Peak Store ⭐ | خدمة على مدار الساعة 🕐")
 
     await interaction.response.send_message(embed=embed, view=PaymentView(amt))
 
