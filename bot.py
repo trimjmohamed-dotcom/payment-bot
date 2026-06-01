@@ -9,19 +9,19 @@ GUILD_ID = int(os.environ["GUILD_ID"])
 config = {
     "paypalLink": os.environ.get("PAYPAL_LINK", ""),
     "paypalImage": os.environ.get("PAYPAL_IMAGE", ""),
-    "stcpayNumber": os.environ.get("STC_NUMBER", ""),
+    "stcpayNumber": os.environ.get("STC_NUMBER", "1151740328"),
     "stcpayImage": os.environ.get("STC_IMAGE", ""),
-    "alrajhiAccount": os.environ.get("ALRAJHI_ACCOUNT", ""),
-    "alrajhiIBAN": os.environ.get("ALRAJHI_IBAN", ""),
+    "alrajhiAccount": os.environ.get("ALRAJHI_ACCOUNT", "0770200100060845880020"),
+    "alrajhiIBAN": os.environ.get("ALRAJHI_IBAN", "SA9580000857608014588020"),
     "alrajhiImage": os.environ.get("ALRAJHI_IMAGE", ""),
-    "barqAccount": os.environ.get("BARQ_ACCOUNT", ""),
-    "barqIBAN": os.environ.get("BARQ_IBAN", ""),
+    "barqAccount": os.environ.get("BARQ_ACCOUNT", "991102428726994"),
+    "barqIBAN": os.environ.get("BARQ_IBAN", "SA9430100991102428726994"),
     "barqImage": os.environ.get("BARQ_IMAGE", ""),
     "ltcAddress": os.environ.get("LTC_ADDRESS", ""),
     "internationalIBAN": os.environ.get("INTL_IBAN", ""),
     "internationalSWIFT": os.environ.get("INTL_SWIFT", ""),
     "internationalBank": os.environ.get("INTL_BANK", ""),
-    "internationalName": os.environ.get("INTL_NAME", ""),
+    "internationalName": os.environ.get("INTL_NAME", "يوسف عيضه خليفس"),
     "bannerImage": os.environ.get("BANNER_IMAGE", ""),
 }
 
@@ -51,7 +51,8 @@ class PaymentView(discord.ui.View):
     async def stcpay(self, interaction: discord.Interaction, button: discord.ui.Button):
         embed = discord.Embed(title="STC Pay 📱", color=COLOR)
         embed.add_field(name="المبلغ", value=f"{self.amount} ريال", inline=False)
-        embed.add_field(name="رقم STC Pay", value=config["stcpayNumber"], inline=False)
+        embed.add_field(name="رقم الحساب", value=config["stcpayNumber"], inline=False)
+        embed.add_field(name="IBAN", value=config["stcpayIBAN"] if config.get("stcpayIBAN") else "SA7978000000001151740328", inline=False)
         if config.get("stcpayImage"):
             embed.set_image(url=config["stcpayImage"])
         await interaction.response.send_message(embed=embed, ephemeral=True)
@@ -62,6 +63,7 @@ class PaymentView(discord.ui.View):
         embed.add_field(name="المبلغ", value=f"{self.amount} ريال", inline=False)
         embed.add_field(name="رقم الحساب", value=config["alrajhiAccount"], inline=False)
         embed.add_field(name="IBAN", value=config["alrajhiIBAN"], inline=False)
+        embed.add_field(name="صاحب الحساب", value=config["internationalName"], inline=False)
         if config.get("alrajhiImage"):
             embed.set_image(url=config["alrajhiImage"])
         await interaction.response.send_message(embed=embed, ephemeral=True)
@@ -72,6 +74,7 @@ class PaymentView(discord.ui.View):
         embed.add_field(name="المبلغ", value=f"{self.amount} ريال", inline=False)
         embed.add_field(name="رقم الحساب", value=config["barqAccount"], inline=False)
         embed.add_field(name="IBAN", value=config["barqIBAN"], inline=False)
+        embed.add_field(name="صاحب الحساب", value=config["internationalName"], inline=False)
         if config.get("barqImage"):
             embed.set_image(url=config["barqImage"])
         await interaction.response.send_message(embed=embed, ephemeral=True)
