@@ -22,6 +22,7 @@ config = {
     "internationalIBAN": os.environ.get("INTL_IBAN", "OM380270368053464840032"),
     "internationalSWIFT": os.environ.get("INTL_SWIFT", "BMUSOMRX"),
     "internationalBank": os.environ.get("INTL_BANK", "Bank Muscat"),
+    "accountName": "يوسف عيضه خنيفس",
     "internationalName": os.environ.get("INTL_NAME", "MOHAMMED HAMOOD SAID AL GHAWI"),
     "bannerImage": os.environ.get("BANNER_IMAGE", "https://cdn.discordapp.com/attachments/897260329778696192/1510983442983157912/Gemini_Generated_Image_t6je0ot6je0ot6je.png?ex=6a1ecc7d&is=6a1d7afd&hm=20929e6fabff36130be03be1f64dea1bc909a436490ca13ef2c320109bd1cba8f&"),
 }
@@ -64,7 +65,7 @@ class PaymentView(discord.ui.View):
         embed.add_field(name="المبلغ", value=f"{self.amount} ريال", inline=False)
         embed.add_field(name="رقم الحساب", value=config["alrajhiAccount"], inline=False)
         embed.add_field(name="IBAN", value=config["alrajhiIBAN"], inline=False)
-        embed.add_field(name="صاحب الحساب", value=config["internationalName"], inline=False)
+        embed.add_field(name="صاحب الحساب", value=config["accountName"], inline=False)
         if config.get("alrajhiImage"):
             embed.set_image(url=config["alrajhiImage"])
         await interaction.response.send_message(embed=embed, ephemeral=True)
@@ -75,7 +76,7 @@ class PaymentView(discord.ui.View):
         embed.add_field(name="المبلغ", value=f"{self.amount} ريال", inline=False)
         embed.add_field(name="رقم الحساب", value=config["barqAccount"], inline=False)
         embed.add_field(name="IBAN", value=config["barqIBAN"], inline=False)
-        embed.add_field(name="صاحب الحساب", value=config["internationalName"], inline=False)
+        embed.add_field(name="صاحب الحساب", value=config["accountName"], inline=False)
         if config.get("barqImage"):
             embed.set_image(url=config["barqImage"])
         await interaction.response.send_message(embed=embed, ephemeral=True)
