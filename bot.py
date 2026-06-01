@@ -74,21 +74,15 @@ class PaymentView(discord.ui.View):
             embed.set_image(url=config["barqImage"])
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
-    @discord.ui.button(label="تحويل دولي 🌍", style=discord.ButtonStyle.secondary)
+    @discord.ui.button(label="تحويل دولي 🌍", style=discord.ButtonStyle.primary)
     async def transfer(self, interaction: discord.Interaction, button: discord.ui.Button):
-        embed = discord.Embed(title="التحويل الدولي 🌍", color=0x000942)
+        embed = discord.Embed(title="التحويل الدولي 🌍", color=0x1E90FF)
         embed.add_field(name="المبلغ", value=f"{self.amount} ريال", inline=False)
         embed.add_field(name="البنك", value=config["internationalBank"], inline=False)
         embed.add_field(name="IBAN", value=config["internationalIBAN"], inline=False)
         embed.add_field(name="SWIFT", value=config["internationalSWIFT"], inline=False)
         embed.add_field(name="صاحب الحساب", value=config["internationalName"], inline=False)
-        await interaction.response.send_message(embed=embed, ephemeral=True)
-
-    @discord.ui.button(label="Crypto 🪙", style=discord.ButtonStyle.secondary)
-    async def crypto(self, interaction: discord.Interaction, button: discord.ui.Button):
-        embed = discord.Embed(title="Crypto 🪙", color=0xF7931A)
-        embed.add_field(name="المبلغ", value=f"{self.amount} ريال", inline=False)
-        embed.add_field(name="Litecoin (LTC)", value=f"`{config['ltcAddress']}`", inline=False)
+        embed.add_field(name="Litecoin (LTC) 🪙", value=f"`{config['ltcAddress']}`", inline=False)
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
 
