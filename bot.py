@@ -8,18 +8,75 @@ with open("config.json", "r", encoding="utf-8") as f:
 
 intents = discord.Intents.default()
 
-bot = commands.Bot(
-    command_prefix="!",
-    intents=intents
-)
-
+bot = commands.Bot(command_prefix="!", intents=intents)
 tree = bot.tree
 guild = discord.Object(id=config["guildId"])
 
 
-@tree.command(name="paypal", description="عرض معلومات PayPal", guild=guild)
+class PaymentView(discord.ui.View):
+    def __init__(self, amount: float):
+        super().__init__()
+        self.amount = amount
+
+    @discord.ui.button(label="PayPal 💳", style=discord.ButtonStyle.primary)
+    async def paypal(self, interaction: discord.Interaction, button: discord.ui.Button):
+        embed = discord.Embed(title="PayPal 💳", color=0x003087)
+        embed.add_field(name="المبلغ", value=f"{self.amount}$", inline=False)
+        embed.add_field(name="رابط الدفع", value=config["paypalLink"], inline=False)
+        if config.get("paypalImage"):
+            embed.set_image(url=config["paypalImage"])
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+
+    @discord.ui.button(label="STC Pay 📱", style=discord.ButtonStyle.primary)
+    async def stcpay(self, interaction: discord.Interaction, button: discord.ui.Button):
+        embed = discord.Embed(title="STC Pay 📱", color=0x6B1F7C)
+        embed.add_field(name="المبلغ", value=f"{self.amount} SAR", inline=False)
+        embed.add_field(name="رقم STC Pay", value=config["stcpayNumber"], inline=False)
+        if config.get("stcpayImage"):
+            embed.set_image(url=config["stcpayImage"])
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+
+    @discord.ui.button(label="الراجحي 🏦", style=discord.ButtonStyle.success)
+    async def alrajhi(self, interaction: discord.Interaction, button: discord.ui.Button):
+        embed = discord.Embed(title="Al Rajhi Bank 🏦", color=0x006400)
+        embed.add_field(name="المبلغ", value=f"{self.amount} SAR", inline=False)
+        embed.add_field(name="رقم الحساب", value=config["alrajhiAccount"], inline=False)
+        embed.add_field(name="IBAN", value=config["alrajhiIBAN"], inline=False)
+        if config.get("alrajhiImage"):
+            embed.set_image(url=config["alrajhiImage"])
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+
+    @discord.ui.button(label="برق 🏦", style=discord.ButtonStyle.success)
+    async def barq(self, interaction: discord.Interaction, button: discord.ui.Button):
+        embed = discord.Embed(title="BARQ - ANB 🏦", color=0x1E90FF)
+        embed.add_field(name="المبلغ", value=f"{self.amount} SAR", inline=False)
+        embed.add_field(name="رقم الحساب", value=config["barqAccount"], inline=False)
+        embed.add_field(name="IBAN", value=config["barqIBAN"], inline=False)
+        if config.get("barqImage"):
+            embed.set_image(url=config["barqImage"])
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+
+    @discord.ui.button(label="تحويل دولي 🌍", style=discord.ButtonStyle.secondary)
+    async def transfer(self, interaction: discord.Interaction, button: discord.ui.Button):
+        embed = discord.Embed(title="التحويل الدولي 🌍", color=0x000942)
+        embed.add_field(name="المبلغ", value=f"{self.amount}$", inline=False)
+        embed.add_field(name="البنك", value=config["internationalBank"], inline=False)
+        embed.add_field(name="IBAN", value=config["internationalIBAN"], inline=False)
+        embed.add_field(name="SWIFT", value=config["internationalSWIFT"], inline=False)
+        embed.add_field(name="صاحب الحساب", value=config["internationalName"], inline=False)
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+
+    @discord.ui.button(label="Crypto 🪙", style=discord.ButtonStyle.secondary)
+    async def crypto(self, interaction: discord.Interaction, button: discord.ui.Button):
+        embed = discord.Embed(title="Crypto 🪙", color=0xF7931A)
+        embed.add_field(name="المبلغ", value=f"{self.amount}$", inline=False)
+        embed.add_field(name="Litecoin (LTC)", value=f"`{config['ltcAddress']}`", inline=False)
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+
+
+@tree.command(name="pay", description="اختر طريقة الدفع", guild=guild)
 @app_commands.describe(amount="المبلغ")
-async def paypal(interaction: discord.Interaction, amount: str):
+async def pay(interaction: discord.Interaction, amount: str):
     try:
         amt = float(amount.replace("$", ""))
     except ValueError:
@@ -27,141 +84,17 @@ async def paypal(interaction: discord.Interaction, amount: str):
         return
 
     embed = discord.Embed(
-        title="PayPal",
-        description=f"المبلغ: {amt}$\nرابط الدفع:\nhttps://paypal.me/rqv6",
+        title="💰 اختر طريقة الدفع",
+        description=f"المبلغ: **{amt}$**\nاختر الطريقة المناسبة لك 👇",
         color=0x000942
     )
 
-    if config.get("paypalImage"):
-        embed.set_image(url=config["paypalImage"])
-
-    await interaction.response.send_message(embed=embed)
-
-
-@tree.command(name="stcpay", description="عرض معلومات STC Pay", guild=guild)
-@app_commands.describe(amount="المبلغ")
-async def stcpay(interaction: discord.Interaction, amount: str):
-    try:
-        amt = float(amount.replace("$", ""))
-    except ValueError:
-        await interaction.response.send_message("❌ الرجاء إدخال مبلغ صحيح", ephemeral=True)
-        return
-
-    embed = discord.Embed(
-        title="STC Pay",
-        description=(
-            f"المبلغ: {amt} SAR\n"
-            f"رقم STC Pay: {config['stcpayNumber']}"
-        ),
-        color=0x000942
-    )
-
-    if config.get("stcpayImage"):
-        embed.set_image(url=config["stcpayImage"])
-
-    await interaction.response.send_message(embed=embed)
-
-
-@tree.command(name="alrajhi", description="عرض معلومات الراجحي", guild=guild)
-@app_commands.describe(amount="المبلغ")
-async def alrajhi(interaction: discord.Interaction, amount: str):
-    try:
-        amt = float(amount.replace("$", ""))
-    except ValueError:
-        await interaction.response.send_message("❌ الرجاء إدخال مبلغ صحيح", ephemeral=True)
-        return
-
-    embed = discord.Embed(
-        title="Al Rajhi Bank",
-        description=(
-            f"المبلغ: {amt} SAR\n"
-            f"رقم الحساب: {config['alrajhiAccount']}\n"
-            f"IBAN: {config['alrajhiIBAN']}"
-        ),
-        color=0x000942
-    )
-
-    if config.get("alrajhiImage"):
-        embed.set_image(url=config["alrajhiImage"])
-
-    await interaction.response.send_message(embed=embed)
-
-
-@tree.command(name="barq", description="عرض معلومات بنك العربي الوطني", guild=guild)
-@app_commands.describe(amount="المبلغ")
-async def barq(interaction: discord.Interaction, amount: str):
-    try:
-        amt = float(amount.replace("$", ""))
-    except ValueError:
-        await interaction.response.send_message("❌ الرجاء إدخال مبلغ صحيح", ephemeral=True)
-        return
-
-    embed = discord.Embed(
-        title="BARQ - ANB",
-        description=(
-            f"المبلغ: {amt} SAR\n"
-            f"رقم الحساب: {config['barqAccount']}\n"
-            f"IBAN: {config['barqIBAN']}"
-        ),
-        color=0x000942
-    )
-
-    if config.get("barqImage"):
-        embed.set_image(url=config["barqImage"])
-
-    await interaction.response.send_message(embed=embed)
-
-
-@tree.command(name="transfer", description="عرض معلومات التحويل الدولي", guild=guild)
-@app_commands.describe(amount="المبلغ")
-async def transfer(interaction: discord.Interaction, amount: str):
-    try:
-        amt = float(amount.replace("$", ""))
-    except ValueError:
-        await interaction.response.send_message("❌ الرجاء إدخال مبلغ صحيح", ephemeral=True)
-        return
-
-    embed = discord.Embed(
-        title="التحويل الدولي 🌍",
-        description=(
-            f"المبلغ: {amt}$\n"
-            f"البنك: Bank Muscat\n"
-            f"IBAN: OM380270368053464840032\n"
-            f"SWIFT: BMUSOMRX\n"
-            f"صاحب الحساب: MOHAMMED HAMOOD SAID AL GHAWI"
-        ),
-        color=0x000942
-    )
-
-    await interaction.response.send_message(embed=embed)
-
-
-@tree.command(name="crypto", description="عرض معلومات الدفع بالكريبتو", guild=guild)
-@app_commands.describe(amount="المبلغ")
-async def crypto(interaction: discord.Interaction, amount: str):
-    try:
-        amt = float(amount.replace("$", ""))
-    except ValueError:
-        await interaction.response.send_message("❌ الرجاء إدخال مبلغ صحيح", ephemeral=True)
-        return
-
-    embed = discord.Embed(
-        title="Crypto 🪙",
-        description=(
-            f"المبلغ: {amt}$\n\n"
-            f"**Litecoin (LTC)**\n"
-            f"`ltc1qssnw8la9l8qzwea575xw5gcshy0j7g70whfclf`"
-        ),
-        color=0x000942
-    )
-
-    await interaction.response.send_message(embed=embed)
+    await interaction.response.send_message(embed=embed, view=PaymentView(amt))
 
 
 @bot.event
 async def on_ready():
     print(f"Logged in as {bot.user}")
-
     try:
         synced = await tree.sync(guild=guild)
         print(f"✅ Synced {len(synced)} commands")
