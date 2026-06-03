@@ -7,11 +7,8 @@ TOKEN = os.environ["TOKEN"]
 GUILD_ID = int(os.environ["GUILD_ID"])
 
 config = {
-    "paypalLink": os.environ.get("PAYPAL_LINK", "https://www.paypal.com/paypalme/rqv6"),
-    "paypalImage": os.environ.get("PAYPAL_IMAGE", ""),
-    "stcpayNumber": os.environ.get("STC_NUMBER", "1151740328"),
-    "stcpayIBAN": os.environ.get("STC_IBAN", "SA7978000000001151740328"),
-    "stcpayImage": os.environ.get("STC_IMAGE", ""),
+    "applePayLink": os.environ.get("APPLEPAY_LINK", "https://peak2026.rmz.gg/"),
+    "stcpayLink": os.environ.get("STCPAY_LINK", "https://peak2026.rmz.gg/"),
     "alrajhiAccount": os.environ.get("ALRAJHI_ACCOUNT", "0770200100060845880020"),
     "alrajhiIBAN": os.environ.get("ALRAJHI_IBAN", "SA9580000857608014588020"),
     "alrajhiImage": os.environ.get("ALRAJHI_IMAGE", ""),
@@ -40,23 +37,18 @@ class PaymentView(discord.ui.View):
         super().__init__()
         self.amount = amount
 
-    @discord.ui.button(label="PayPal 💳", style=discord.ButtonStyle.primary)
-    async def paypal(self, interaction: discord.Interaction, button: discord.ui.Button):
-        embed = discord.Embed(title="PayPal 💳", color=COLOR)
+    @discord.ui.button(label="Apple Pay 🍎", style=discord.ButtonStyle.primary)
+    async def applepay(self, interaction: discord.Interaction, button: discord.ui.Button):
+        embed = discord.Embed(title="Apple Pay 🍎", color=COLOR)
         embed.add_field(name="المبلغ", value=f"{self.amount} ريال", inline=False)
-        embed.add_field(name="رابط الدفع", value=config["paypalLink"], inline=False)
-        if config.get("paypalImage"):
-            embed.set_image(url=config["paypalImage"])
+        embed.add_field(name="رابط الدفع", value=config["applePayLink"], inline=False)
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
     @discord.ui.button(label="STC Pay 📱", style=discord.ButtonStyle.primary)
     async def stcpay(self, interaction: discord.Interaction, button: discord.ui.Button):
         embed = discord.Embed(title="STC Pay 📱", color=COLOR)
         embed.add_field(name="المبلغ", value=f"{self.amount} ريال", inline=False)
-        embed.add_field(name="رقم الحساب", value=config["stcpayNumber"], inline=False)
-        embed.add_field(name="IBAN", value=config["stcpayIBAN"], inline=False)
-        if config.get("stcpayImage"):
-            embed.set_image(url=config["stcpayImage"])
+        embed.add_field(name="رابط الدفع", value=config["stcpayLink"], inline=False)
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
     @discord.ui.button(label="الراجحي 🏦", style=discord.ButtonStyle.success)
