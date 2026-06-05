@@ -34,32 +34,29 @@ tree = bot.tree
 guild = discord.Object(id=GUILD_ID)
 
 
+# ─── أزرار طرق الدفع ─────────────────────────────────────────────────────────
 class PaymentView(discord.ui.View):
-    def __init__(self, amount: float):
-        super().__init__()
-        self.amount = amount
+    def __init__(self):
+        super().__init__(timeout=None)
 
-    @discord.ui.button(label="Apple Pay 🍎", style=discord.ButtonStyle.primary)
+    @discord.ui.button(label="Apple Pay 🍎", style=discord.ButtonStyle.primary, custom_id="pay_apple")
     async def applepay(self, interaction: discord.Interaction, button: discord.ui.Button):
         embed = discord.Embed(title="Apple Pay 🍎", color=COLOR)
-        embed.add_field(name="المبلغ", value=f"{self.amount} ريال", inline=False)
         embed.add_field(name="رابط الدفع", value=config["applePayLink"], inline=False)
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
-    @discord.ui.button(label="STC Pay 📱", style=discord.ButtonStyle.primary)
+    @discord.ui.button(label="STC Pay 📱", style=discord.ButtonStyle.primary, custom_id="pay_stc")
     async def stcpay(self, interaction: discord.Interaction, button: discord.ui.Button):
         embed = discord.Embed(title="STC Pay 📱", color=COLOR)
-        embed.add_field(name="المبلغ", value=f"{self.amount} ريال", inline=False)
         embed.add_field(name="رقم الحساب", value=config["stcpayNumber"], inline=False)
         embed.add_field(name="IBAN", value=config["stcpayIBAN"], inline=False)
         if config.get("stcpayImage"):
             embed.set_image(url=config["stcpayImage"])
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
-    @discord.ui.button(label="الراجحي 🏦", style=discord.ButtonStyle.success)
+    @discord.ui.button(label="الراجحي 🏦", style=discord.ButtonStyle.success, custom_id="pay_alrajhi")
     async def alrajhi(self, interaction: discord.Interaction, button: discord.ui.Button):
         embed = discord.Embed(title="Al Rajhi Bank 🏦", color=COLOR)
-        embed.add_field(name="المبلغ", value=f"{self.amount} ريال", inline=False)
         embed.add_field(name="رقم الحساب", value=config["alrajhiAccount"], inline=False)
         embed.add_field(name="IBAN", value=config["alrajhiIBAN"], inline=False)
         embed.add_field(name="صاحب الحساب", value=config["accountName"], inline=False)
@@ -67,10 +64,9 @@ class PaymentView(discord.ui.View):
             embed.set_image(url=config["alrajhiImage"])
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
-    @discord.ui.button(label="برق 🏦", style=discord.ButtonStyle.success)
+    @discord.ui.button(label="برق 🏦", style=discord.ButtonStyle.success, custom_id="pay_barq")
     async def barq(self, interaction: discord.Interaction, button: discord.ui.Button):
         embed = discord.Embed(title="BARQ - ANB 🏦", color=COLOR)
-        embed.add_field(name="المبلغ", value=f"{self.amount} ريال", inline=False)
         embed.add_field(name="رقم الحساب", value=config["barqAccount"], inline=False)
         embed.add_field(name="IBAN", value=config["barqIBAN"], inline=False)
         embed.add_field(name="صاحب الحساب", value=config["accountName"], inline=False)
@@ -78,10 +74,9 @@ class PaymentView(discord.ui.View):
             embed.set_image(url=config["barqImage"])
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
-    @discord.ui.button(label="تحويل دولي 🌍", style=discord.ButtonStyle.primary)
+    @discord.ui.button(label="تحويل دولي 🌍", style=discord.ButtonStyle.primary, custom_id="pay_intl")
     async def transfer(self, interaction: discord.Interaction, button: discord.ui.Button):
         embed = discord.Embed(title="التحويل الدولي 🌍", color=COLOR)
-        embed.add_field(name="المبلغ", value=f"{self.amount} ريال", inline=False)
         embed.add_field(name="البنك", value=config["internationalBank"], inline=False)
         embed.add_field(name="IBAN", value=config["internationalIBAN"], inline=False)
         embed.add_field(name="SWIFT", value=config["internationalSWIFT"], inline=False)
@@ -90,37 +85,30 @@ class PaymentView(discord.ui.View):
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
 
-@tree.command(name="pay", description="اختر طريقة الدفع", guild=guild)
-@app_commands.describe(amount="المبلغ بالريال")
-async def pay(interaction: discord.Interaction, amount: str):
-    try:
-        amt = float(amount.replace("ريال", "").strip())
-    except ValueError:
-        await interaction.response.send_message("❌ الرجاء إدخال مبلغ صحيح", ephemeral=True)
-        return
-
+# ─── أمر /setup_pay ───────────────────────────────────────────────────────────
+@tree.command(name="setup_pay", description="أرسل رسالة الدفع الثابتة في هذه القناة", guild=guild)
+async def setup_pay(interaction: discord.Interaction):
     embed = discord.Embed(
         title="🌟 أهلاً وسهلاً في Peak Store 🌟",
         description=(
             "نسعد بخدمتك دائماً ✨\n\n"
             "─────────────────\n"
-            f"💎 المبلغ المطلوب: **{amt} ريال**\n"
-            "─────────────────\n\n"
-            "اختر طريقة الدفع 👇"
+            "اختر طريقة الدفع 👇\n"
+            "─────────────────"
         ),
-        color=COLOR
+        color=COLOR,
     )
-
     if config.get("bannerImage"):
         embed.set_image(url=config["bannerImage"])
-
     embed.set_footer(text="Peak Store ⭐ | خدمة على مدار الساعة 🕐")
 
-    await interaction.response.send_message(embed=embed, view=PaymentView(amt))
+    await interaction.response.send_message(embed=embed, view=PaymentView())
 
 
+# ─── on_ready ─────────────────────────────────────────────────────────────────
 @bot.event
 async def on_ready():
+    bot.add_view(PaymentView())
     print(f"Logged in as {bot.user}")
     try:
         synced = await tree.sync(guild=guild)
