@@ -12,7 +12,7 @@ config = {
     "stcpayNumber": os.environ.get("STC_NUMBER", "1151740328"),
     "stcpayIBAN": os.environ.get("STC_IBAN", "SA7978000000001151740328"),
     "stcpayImage": os.environ.get("STC_IMAGE", ""),
-    "alrajhiAccount": os.environ.get("ALRAJHI_ACCOUNT", "0770200100060845880020"),
+    "alrajhiAccount": os.environ.get("ALRAJHI_ACCOUNT", "077020010006084588020"),
     "alrajhiIBAN": os.environ.get("ALRAJHI_IBAN", "SA9580000857608014588020"),
     "alrajhiImage": os.environ.get("ALRAJHI_IMAGE", ""),
     "barqAccount": os.environ.get("BARQ_ACCOUNT", "991102428726994"),
