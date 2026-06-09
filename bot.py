@@ -24,7 +24,7 @@ config = {
     "internationalBank": os.environ.get("INTL_BANK", "Bank Muscat"),
     "accountName": "يوسف عيضه خنيفس",
     "internationalName": os.environ.get("INTL_NAME", "MOHAMMED HAMOOD SAID AL GHAWI"),
-    "bannerImage": os.environ.get("BANNER_IMAGE", "https://cdn.discordapp.com/attachments/897260329778696192/1510983442983157912/Gemini_Generated_Image_t6je0ot6je0ot6je.png?ex=6a1ecc7d&is=6a1d7afd&hm=20929e6fabff36130be03be1f64dea1bc909a436490ca13ef2c320109bd1cba8f&"),
+    "bannerImage": os.environ.get("BANNER_IMAGE", "https://cdn.discordapp.com/attachments/863537234896093194/1513739259230552234/Gemini_Generated_Image_1t6je0ot6je0ot6je.png?ex=6a28d30b&is=6a27818b&hm=4c873c875ae2f7630202dd578e5556e60c907e8a297f01e9b76c6236db1fbbcb&"),
 }
 
 COLOR = 0xA855F7
